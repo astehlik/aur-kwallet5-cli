@@ -9,23 +9,22 @@ url="https://www.mirbsd.org/kwalletcli.htm"
 license=('custom:MirOS' 'LGPL3')
 arch=('i686' 'x86_64')
 depends=('kwallet5' 'mksh')
-source=("http://www.mirbsd.org/MirOS/dist/hosted/${pkgname}/${pkgname}-${pkgver}.tar.gz")
+source=("http://www.mirbsd.org/MirOS/dist/hosted/kwalletcli/kwalletcli-${pkgver}.tar.gz")
 sha512sums=('237d427f87f2d313378aacfdb056c658f0a51fda3a8592d24792916d14efc462153aa0f9ebabdcf38375824f349208db367be6f369f3f7c9c1fea8187f787bfa')
 
 build() {
-  cd "${srcdir}/${pkgname}"
+  cd "${srcdir}/kwalletcli"
   sed -i -e 's/CPPFLAGS+=\t${KDE_INCS} -D_GNU_SOURCE/CPPFLAGS+=\t${KDE_INCS} -fPIC -D_GNU_SOURCE/' GNUmakefile
   sed -i -e 's/CFLAGS?=\t.O2/CFLAGS?=\t-O2 -fPIC\nLDDFLAGS?=\t-fPIC/' GNUmakefile
   make KDE_VER=5
 }
 
 package() {
-  cd "${srcdir}/${pkgname}"
+  cd "${srcdir}/kwalletcli"
   install -d "${pkgdir}"/usr/{bin,share/man/man1}
   for F in kwalletaskpass kwalletcli kwalletcli_getpin pinentry-kwallet; do
     install ${F} "${pkgdir}"/usr/bin/${F}
     install -m644 ${F}.1 "${pkgdir}"/usr/share/man/man1/${F}.1
   done
-  install -Dm644 LICENCE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENCE
+  install -Dm644 LICENCE "${pkgdir}"/usr/share/licenses/kwalletcli/LICENCE
 }
-
